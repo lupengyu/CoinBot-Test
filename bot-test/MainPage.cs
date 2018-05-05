@@ -48,6 +48,7 @@ namespace bot_test
             {
                 double initCoin;
                 double exchangeCoin;
+                int minBetween;
                 String symbol;
                 String contractType;
                 String type;
@@ -56,7 +57,9 @@ namespace bot_test
                     if (!double.TryParse(初始币数.Text, out initCoin)
                     || !double.TryParse(单次交易.Text, out exchangeCoin))
                         throw new Exception("初始币数与单次交易必须为数字");
-                    if(MACD_choice.Checked)
+                    if(!int.TryParse(最短间隔.Text, out minBetween))
+                        throw new Exception("最短间隔必须为数字");
+                    if (MACD_choice.Checked)
                     {
                         double rate;
                         if (!double.TryParse(MACD_rate.Text, out rate))
@@ -77,6 +80,8 @@ namespace bot_test
                             throw new Exception("交易策略比率为必填");
                         if (!int.TryParse(MAbig.Text, out rate2))
                             throw new Exception("交易策略比率为必填");
+                        if(rate1 > 60 || rate2 > 60)
+                            throw new Exception("MA策略参数过大，最大60");
                         strategy = new Strategy("MA");
                         strategy.p1 = rate1;
                         strategy.p1 = rate2;
@@ -174,7 +179,7 @@ namespace bot_test
                         throw new Exception("请选择时间梯度");
                     }
                 }
-                thread = new MainThread(this, initCoin, exchangeCoin, strategy, symbol, contractType, type);
+                thread = new MainThread(this, initCoin, exchangeCoin, strategy, symbol, contractType, type, minBetween);
             } catch(Exception err)
             {
                 交易信息_Add("系统启动失败");
@@ -305,7 +310,6 @@ namespace bot_test
             MA_choice.Enabled = false;
             MAsmall.Enabled = false;
             MAbig.Enabled = false;
-            Check.Enabled = false;
             初始币数.Enabled = false;
             单次交易.Enabled = false;
             一分钟.Enabled = false;
@@ -330,6 +334,7 @@ namespace bot_test
             BTG.Enabled = false;
             XRP.Enabled = false;
             EOS.Enabled = false;
+            最短间隔.Enabled = false;
         }
 
         /// <summary>
@@ -344,7 +349,6 @@ namespace bot_test
             MACD_rate.Enabled = true;
             KDJ_choice.Enabled = true;
             KDJ_rate.Enabled = true;
-            Check.Enabled = true;
             MA_choice.Enabled = true;
             MAsmall.Enabled = true;
             MAbig.Enabled = true;
@@ -376,6 +380,7 @@ namespace bot_test
             BTG.Enabled = true;
             XRP.Enabled = true;
             EOS.Enabled = true;
+            最短间隔.Enabled = true;
         }
 
         /// <summary>

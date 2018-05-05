@@ -9,6 +9,7 @@ using bot_test.Unit;
 using com.okcoin.rest.future;
 using com.okcoin.rest.stock;
 using bot_test.strategy;
+using bot_test.future;
 
 namespace bot_test.thread
 {
@@ -73,6 +74,38 @@ namespace bot_test.thread
         ///  日期
         /// </summary>
         private int day;
+        /// <summary>
+        ///  最短间隔
+        /// </summary>
+        private int minBetween;
+        /// <summary>
+        ///  时间计数
+        /// </summary>
+        private int timecount = 0;
+        /// <summary>
+        ///  当前订单
+        /// </summary>
+        private Order order = null;
+        /// <summary>
+        ///  当前卖出请求
+        /// </summary>
+        private SellOrder sellorder = null;
+        /// <summary>
+        ///  当前买一价
+        /// </summary>
+        private double buy1 = 0;
+        /// <summary>
+        ///  当前卖一价
+        /// </summary>
+        private double sell1 = 0;
+        /// <summary>
+        ///  总币数
+        /// </summary>
+        private double coinsum = 0;
+        /// <summary>
+        ///  订单等待时间
+        /// </summary>
+        private int wait = -1;
 
         /// <summary>
         /// "MainThread"构造函数
@@ -86,7 +119,7 @@ namespace bot_test.thread
         /// <param name="acontractType">合约期限</param>
         /// <returns></returns>
         public MainThread(MainPage apage, double ainitCoin, double aexchangeCoin,
-            Strategy astrategy, String asymbol, String acontractType, String atype)
+            Strategy astrategy, String asymbol, String acontractType, String atype, int aminBetween)
         {
             this.page = apage;
             this.initCoin = ainitCoin;
@@ -95,7 +128,10 @@ namespace bot_test.thread
             this.symbol = asymbol;
             this.contractType = acontractType;
             this.Coin = ainitCoin;
+            coinsum = Coin;
             this.type = atype;
+            this.minBetween = aminBetween;
+            this.timecount = aminBetween;
             startTime = BotUnit.getLocalTime();
             day = BotUnit.getDay();
             String url_prex = "https://www.okex.cn";
@@ -165,22 +201,94 @@ namespace bot_test.thread
             try
             {
                 String result = getRequest.future_ticker(symbol, contractType);
-                result = result.Replace("\"", "'");
+                //result = result.Replace("\"", "'");
                 String time = jsonGetKey(result, "date");
                 if(String.Compare(time, newTime) == 1)
                 {
                     newTime = time;
                     String last = jsonGetKey(result, "last");
+                    String buy = jsonGetKey(result, "buy");
+                    String sell = jsonGetKey(result, "sell");
                     page.setPrice(last);
                     double price;
+                    double buyprice;
+                    double sellprice;
                     double.TryParse(last, out price);
+                    double.TryParse(buy, out buyprice);
+                    double.TryParse(sell, out sellprice);
+                    buy1 = buyprice;
+                    sell1 = sellprice;
                     if (dayBegin != 0)
                     {
                         double zhangfu = 100 * (price - dayBegin) / dayBegin;
                         page.set日涨幅(zhangfu.ToString() + "%");
                     }
-                    double nowMoney = Coin * price;
+                    coinsum = Coin;
+                    if (order != null)
+                    {
+                        if(order.judge == false)
+                        {
+                            if(price <= order.getbuyprice())
+                            {
+                                order.judge = true;
+                                page.交易信息_Add("买入订单交易成功");
+                                Coin -= order.getcoin() * 1.003;
+                                coinsum -= order.getcoin() * 0.003;
+                                timecount = 0;
+                            } else
+                            {
+                                if(wait == 60)
+                                {
+                                    page.交易信息_Add("买入订单超时");
+                                    order = null;
+                                }
+                            }
+                        } else
+                        {   // 当前有持仓
+                            if (-((price - order.getbuyprice()) * 10 / price) > order.getcoin())
+                            {
+                                page.交易信息_Add("你的仓位已爆仓");
+                            }
+                            else
+                            {
+                                if (sellorder != null)
+                                {
+                                    if (sellorder.judge == false)
+                                    {
+                                        if (price >= sellorder.getsellprice())
+                                        {
+                                            sellorder.judge = true;
+                                            page.交易信息_Add("卖出订单交易成功");
+                                            Coin += ((sellorder.getsellprice() - sellorder.getprice()) * 10 / sellorder.getsellprice()) * 0.995;
+                                            coinsum = Coin;
+                                            timecount = 0;
+                                            order = null;
+                                            sellorder = null;
+                                        }
+                                        else
+                                        {
+                                            if (wait == 60)
+                                            {
+                                                page.交易信息_Add("卖出订单超时");
+                                                sell = null;
+                                            }
+                                            coinsum += order.getcoin();
+                                            coinsum += (price - order.getbuyprice()) * 10 / price;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    coinsum += order.getcoin();
+                                    coinsum += (price - order.getbuyprice()) * 10 / price;
+                                }
+                            }
+                        }
+                    }
+                    double nowMoney = coinsum * price;
+                    page.set币数目(coinsum.ToString());
                     page.set总金额(nowMoney.ToString());
+                    page.set收益率(getWinrate());
                 }
             } catch(Exception e)
             {
@@ -227,6 +335,145 @@ namespace bot_test.thread
             page.setMACD(MACD.ToString());
             String kdj = "K:" + K.ToString().Substring(0, 2) + " D:" + D.ToString().Substring(0, 2) + " J:" + J.ToString().Substring(0, 2);
             page.setKDJ(kdj);
+            if(strategy.strategyname == "MACD")
+            {
+                if(MACD > strategy.p1)
+                {//买入
+                    if(order == null)
+                    {
+                        if(minBetween == timecount)
+                        {
+                            if(sell1 != 0)
+                            {
+                                if(Coin >= exchangeCoin)
+                                {
+                                    order = new Order(exchangeCoin, sell1, page);
+                                    wait = 0;
+                                }
+                            }
+                        }
+                    }
+                } else
+                {//卖出
+                    if(order != null)
+                    {
+                        if(order.judge == false)
+                        {
+                            order = null;
+                            page.交易信息_Add("买入订单删除");
+                            return;
+                        }
+                        if (minBetween == timecount)
+                        {
+                            if(buy1 != 0)
+                            {
+                                sellorder = new SellOrder(order.getcoin(), order.getbuyprice(), buy1, page);
+                                wait = 0;
+                            }
+                        }
+                    }
+                }
+            } else if(strategy.strategyname == "KDJ")
+            {
+                if (D - K > strategy.p1)
+                {//买入
+                    if (order == null)
+                    {
+                        if (minBetween == timecount)
+                        {
+                            if (sell1 != 0)
+                            {
+                                if (Coin >= exchangeCoin)
+                                {
+                                    order = new Order(exchangeCoin, sell1, page);
+                                    wait = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {//卖出
+                    if (order != null)
+                    {
+                        if (order.judge == false)
+                        {
+                            order = null;
+                            page.交易信息_Add("买入订单删除");
+                            return;
+                        }
+                        if (minBetween == timecount)
+                        {
+                            if (buy1 != 0)
+                            {
+                                sellorder = new SellOrder(order.getcoin(), order.getbuyprice(), buy1, page);
+                                wait = 0;
+                            }
+                        }
+                    }
+                }
+            } else
+            {
+                int masmall = (int)strategy.p1;
+                int masbig = (int)strategy.p2;
+                double sum1 = 0, sum2 = 0;
+                int index = 0;
+                for(int i = 417;index < masmall ;index++)
+                {
+                    double price;
+                    double.TryParse(sArray[i], out price);
+                    sum1 += price;
+                    i -= 7;
+                }
+                index = 0;
+                for (int i = 417; index < masbig; index++)
+                {
+                    double price;
+                    double.TryParse(sArray[i], out price);
+                    sum2 += price;
+                    i -= 7;
+                }
+                double ma1 = sum1 / masmall;
+                double ma2 = sum2 / masbig;
+                if(ma1 > ma2)
+                {
+                    //买入
+                    if (order == null)
+                    {
+                        if (minBetween == timecount)
+                        {
+                            if (sell1 != 0)
+                            {
+                                if (Coin >= exchangeCoin)
+                                {
+                                    order = new Order(exchangeCoin, sell1, page);
+                                    wait = 0;
+                                }
+                            }
+                        }
+                    }
+                } else
+                {
+                    //卖出
+                    if (order != null)
+                    {
+                        if (order.judge == false)
+                        {
+                            order = null;
+                            page.交易信息_Add("买入订单删除");
+                            return;
+                        }
+                        if (minBetween == timecount)
+                        {
+                            if (buy1 != 0)
+                            {
+                                sellorder = new SellOrder(order.getcoin(), order.getbuyprice(), buy1, page);
+                                wait = 0;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -240,6 +487,11 @@ namespace bot_test.thread
             ThreadPool.QueueUserWorkItem(getP, null);
         }
 
+        /// <summary>
+        /// 更新当天数据
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private void dayrefrash(object data)
         {
             day = BotUnit.getDay();
@@ -261,6 +513,14 @@ namespace bot_test.thread
                 if(day != BotUnit.getDay())
                 {
                     ThreadPool.QueueUserWorkItem(dayrefrash, null);
+                }
+                if(timecount != minBetween)
+                {
+                    timecount++;
+                }
+                if(wait != -1 && wait != 60)
+                {
+                    wait++;
                 }
                 Thread.Sleep(1000);
             }
@@ -286,7 +546,7 @@ namespace bot_test.thread
             page.交易信息_Add("总结报告:");
             page.交易信息_Add("当前时间:" + BotUnit.getLocalTime());
             page.交易信息_Add("初始币数:" + initCoin.ToString());
-            page.交易信息_Add("当前币数:" + Coin.ToString());
+            page.交易信息_Add("当前币数:" + coinsum.ToString());
             page.交易信息_Add("总收益率:" + getWinrate());
             page.交易信息_Add("####################");
         }
@@ -297,7 +557,7 @@ namespace bot_test.thread
         /// <returns></returns>
         private String getWinrate()
         {
-            double result = 100 * (Coin - initCoin) / initCoin;
+            double result = 100 * (coinsum - initCoin) / initCoin;
             return result.ToString() + "%";
         }
     }

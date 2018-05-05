@@ -72,7 +72,6 @@
             this.十五分钟 = new System.Windows.Forms.RadioButton();
             this.三分钟 = new System.Windows.Forms.RadioButton();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.Check = new System.Windows.Forms.CheckBox();
             this.单次交易 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.初始币数 = new System.Windows.Forms.TextBox();
@@ -80,6 +79,9 @@
             this.结束 = new System.Windows.Forms.Button();
             this.开始 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.MAbig = new System.Windows.Forms.TextBox();
+            this.MAsmall = new System.Windows.Forms.TextBox();
+            this.MA_choice = new System.Windows.Forms.RadioButton();
             this.KDJ_rate = new System.Windows.Forms.TextBox();
             this.MACD_rate = new System.Windows.Forms.TextBox();
             this.MACD_choice = new System.Windows.Forms.RadioButton();
@@ -93,9 +95,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.价格 = new System.Windows.Forms.TextBox();
-            this.MA_choice = new System.Windows.Forms.RadioButton();
-            this.MAsmall = new System.Windows.Forms.TextBox();
-            this.MAbig = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.最短间隔 = new System.Windows.Forms.TextBox();
             this.合约选择.SuspendLayout();
             this.合约列表.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -387,9 +388,10 @@
             // 
             // 策略选择
             // 
+            this.策略选择.Controls.Add(this.最短间隔);
+            this.策略选择.Controls.Add(this.label11);
             this.策略选择.Controls.Add(this.时间梯度);
             this.策略选择.Controls.Add(this.panel4);
-            this.策略选择.Controls.Add(this.Check);
             this.策略选择.Controls.Add(this.单次交易);
             this.策略选择.Controls.Add(this.label10);
             this.策略选择.Controls.Add(this.初始币数);
@@ -563,18 +565,6 @@
             this.panel4.Size = new System.Drawing.Size(200, 100);
             this.panel4.TabIndex = 14;
             // 
-            // Check
-            // 
-            this.Check.AutoSize = true;
-            this.Check.Checked = true;
-            this.Check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Check.Location = new System.Drawing.Point(132, 94);
-            this.Check.Name = "Check";
-            this.Check.Size = new System.Drawing.Size(114, 16);
-            this.Check.TabIndex = 13;
-            this.Check.Text = "对手价/分批交易";
-            this.Check.UseVisualStyleBackColor = true;
-            // 
             // 单次交易
             // 
             this.单次交易.Location = new System.Drawing.Point(132, 64);
@@ -643,6 +633,35 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(108, 109);
             this.panel1.TabIndex = 6;
+            // 
+            // MAbig
+            // 
+            this.MAbig.Location = new System.Drawing.Point(51, 88);
+            this.MAbig.Name = "MAbig";
+            this.MAbig.ReadOnly = true;
+            this.MAbig.Size = new System.Drawing.Size(57, 21);
+            this.MAbig.TabIndex = 18;
+            this.MAbig.Text = "30";
+            // 
+            // MAsmall
+            // 
+            this.MAsmall.Location = new System.Drawing.Point(51, 67);
+            this.MAsmall.Name = "MAsmall";
+            this.MAsmall.ReadOnly = true;
+            this.MAsmall.Size = new System.Drawing.Size(57, 21);
+            this.MAsmall.TabIndex = 17;
+            this.MAsmall.Text = "7";
+            // 
+            // MA_choice
+            // 
+            this.MA_choice.AutoSize = true;
+            this.MA_choice.Location = new System.Drawing.Point(3, 78);
+            this.MA_choice.Name = "MA_choice";
+            this.MA_choice.Size = new System.Drawing.Size(35, 16);
+            this.MA_choice.TabIndex = 16;
+            this.MA_choice.Text = "MA";
+            this.MA_choice.UseVisualStyleBackColor = true;
+            this.MA_choice.CheckedChanged += new System.EventHandler(this.MA_choice_CheckedChanged);
             // 
             // KDJ_rate
             // 
@@ -771,34 +790,22 @@
             this.价格.Size = new System.Drawing.Size(108, 21);
             this.价格.TabIndex = 0;
             // 
-            // MA_choice
+            // label11
             // 
-            this.MA_choice.AutoSize = true;
-            this.MA_choice.Location = new System.Drawing.Point(3, 78);
-            this.MA_choice.Name = "MA_choice";
-            this.MA_choice.Size = new System.Drawing.Size(35, 16);
-            this.MA_choice.TabIndex = 16;
-            this.MA_choice.Text = "MA";
-            this.MA_choice.UseVisualStyleBackColor = true;
-            this.MA_choice.CheckedChanged += new System.EventHandler(this.MA_choice_CheckedChanged);
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(132, 88);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(71, 12);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "最短间隔(s)";
             // 
-            // MAsmall
+            // 最短间隔
             // 
-            this.MAsmall.Location = new System.Drawing.Point(51, 67);
-            this.MAsmall.Name = "MAsmall";
-            this.MAsmall.ReadOnly = true;
-            this.MAsmall.Size = new System.Drawing.Size(57, 21);
-            this.MAsmall.TabIndex = 17;
-            this.MAsmall.Text = "7";
-            // 
-            // MAbig
-            // 
-            this.MAbig.Location = new System.Drawing.Point(51, 88);
-            this.MAbig.Name = "MAbig";
-            this.MAbig.ReadOnly = true;
-            this.MAbig.Size = new System.Drawing.Size(57, 21);
-            this.MAbig.TabIndex = 18;
-            this.MAbig.Text = "30";
+            this.最短间隔.Location = new System.Drawing.Point(132, 103);
+            this.最短间隔.Name = "最短间隔";
+            this.最短间隔.Size = new System.Drawing.Size(108, 21);
+            this.最短间隔.TabIndex = 16;
+            this.最短间隔.Text = "300";
             // 
             // MainPage
             // 
@@ -885,7 +892,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox 初始币数;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.CheckBox Check;
         private System.Windows.Forms.TextBox KDJ_rate;
         private System.Windows.Forms.TextBox MACD_rate;
         private System.Windows.Forms.Panel panel4;
@@ -906,5 +912,7 @@
         private System.Windows.Forms.TextBox MAbig;
         private System.Windows.Forms.TextBox MAsmall;
         private System.Windows.Forms.RadioButton MA_choice;
+        private System.Windows.Forms.TextBox 最短间隔;
+        private System.Windows.Forms.Label label11;
     }
 }

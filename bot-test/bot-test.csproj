@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="future\FutureRestApiV1.cs" />
     <Compile Include="future\IFutureRestApi.cs" />
+    <Compile Include="future\Order.cs" />
+    <Compile Include="future\SellOrder.cs" />
     <Compile Include="MainPage.cs">
       <SubType>Form</SubType>
     </Compile>
