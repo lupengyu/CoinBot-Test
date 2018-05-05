@@ -105,7 +105,6 @@ namespace bot_test.thread
             mainthread.Start();
             ThreadPool.QueueUserWorkItem(dayrefrash, null);
             page.交易信息_Add("系统启动:" + startTime);
-            page.交易信息_Add(strategy.strategyname);
             page.set初始金额(initCoin.ToString());
             page.set币数目(Coin.ToString());
             page.set收益率(getWinrate());
@@ -196,25 +195,38 @@ namespace bot_test.thread
         /// <returns></returns>
         private void getP(object data)
         {
-            String result = getRequest.future_kline(symbol, type, contractType, "26", "");
+            String result = getRequest.future_kline(symbol, type, contractType, "60", "");
             String[] sArray = result.Split(',');//开高低收
             double EMA12 = 0;
             double EMA26 = 0;
             double DIF = 0;
             double DEA = 0;
             double nowPrice = 0;
+            double K = 50;
+            double D = 50;
+            double RSV = 0;
             for (int i = 4; i < sArray.Length; i += 7)
             {
                 double price;
+                double high;
+                double low;
                 double.TryParse(sArray[i], out price);
+                double.TryParse(sArray[i - 2], out high);
+                double.TryParse(sArray[i - 1], out low);
                 nowPrice = price;
                 EMA12 = (EMA12 * 11) / 13 + price * 2 / 13;
                 EMA26 = (EMA26 * 25) / 27 + price * 2 / 27;
                 DIF = EMA12 - EMA26;
                 DEA = (DEA * 8) / 10 + DIF * 2 / 10;
+                RSV = (price - low) * 100 / (high - low);
+                K = 2 * K / 3 + RSV / 3;
+                D = 2 * D / 3 + K / 3;
             }
             double MACD = (DIF - DEA) * 2;
+            double J = 3 * K - 2 * D;
             page.setMACD(MACD.ToString());
+            String kdj = "K:" + K.ToString().Substring(0, 2) + " D:" + D.ToString().Substring(0, 2) + " J:" + J.ToString().Substring(0, 2);
+            page.setKDJ(kdj);
         }
 
         /// <summary>

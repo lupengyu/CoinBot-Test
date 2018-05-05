@@ -72,10 +72,10 @@ namespace bot_test
                         strategy.p1 = rate;
                     } else if(MA_choice.Checked)
                     {
-                        double rate1, rate2;
-                        if (!double.TryParse(MAsmall.Text, out rate1))
+                        int rate1, rate2;
+                        if (!int.TryParse(MAsmall.Text, out rate1))
                             throw new Exception("交易策略比率为必填");
-                        if (!double.TryParse(MAbig.Text, out rate2))
+                        if (!int.TryParse(MAbig.Text, out rate2))
                             throw new Exception("交易策略比率为必填");
                         strategy = new Strategy("MA");
                         strategy.p1 = rate1;
