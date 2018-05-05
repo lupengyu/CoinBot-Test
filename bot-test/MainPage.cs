@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using bot_test.Unit;
-using bot_test.Thread;
+using bot_test.thread;
 
 namespace bot_test
 {
@@ -31,6 +31,7 @@ namespace bot_test
         /// <returns></returns>
         public MainPage()
         {
+            Control.CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
         }
 
@@ -50,6 +51,7 @@ namespace bot_test
                 int strategy;
                 String symbol;
                 String contractType;
+                String type;
                 {
                     if (!double.TryParse(初始币数.Text, out initCoin)
                     || !double.TryParse(单次交易.Text, out exchangeCoin))
@@ -119,8 +121,48 @@ namespace bot_test
                     {
                         throw new Exception("请选择一个合约期限");
                     }
+                    if(一分钟.Checked)
+                    {
+                        type = "1min";
+                    } else if(三分钟.Checked)
+                    {
+                        type = "3min";
+                    } else if(五分钟.Checked)
+                    {
+                        type = "5min";
+                    } else if(十五分钟.Checked)
+                    {
+                        type = "15min";
+                    } else if(三十分钟.Checked)
+                    {
+                        type = "30min";
+                    } else if(一小时.Checked)
+                    {
+                        type = "1hour";
+                    } else if(两小时.Checked)
+                    {
+                        type = "2hour";
+                    } else if(四小时.Checked)
+                    {
+                        type = "4hour";
+                    } else if(六小时.Checked)
+                    {
+                        type = "6hour";
+                    } else if(十二小时.Checked)
+                    {
+                        type = "12hour";
+                    } else if(日.Checked)
+                    {
+                        type = "1day";
+                    } else if(周.Checked)
+                    {
+                        type = "1week";
+                    } else
+                    {
+                        throw new Exception("请选择时间梯度");
+                    }
                 }
-                thread = new MainThread(this, initCoin, exchangeCoin, strategy, rate, symbol, contractType);
+                thread = new MainThread(this, initCoin, exchangeCoin, strategy, rate, symbol, contractType, type);
             } catch(Exception err)
             {
                 交易信息_Add("系统启动失败");
@@ -151,6 +193,69 @@ namespace bot_test
         public void 交易信息_Add(String str)
         {
             交易信息.Text += str + CSRF;
+            this.交易信息.Focus();
+            this.交易信息.Select(this.交易信息.TextLength, 0);
+            this.交易信息.ScrollToCaret();
+        }
+
+        /// <summary>
+        /// 设置价格
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void setPrice(String str)
+        {
+            价格.Text = str;
+        }
+
+        /// <summary>
+        /// 设置日涨幅
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void set日涨幅(String str)
+        {
+            日涨幅.Text = str;
+        }
+
+        /// <summary>
+        /// 设置总金额
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void set总金额(String str)
+        {
+            总金额.Text = str;
+        }
+
+        /// <summary>
+        /// 设置初始金额
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void set初始金额(String str)
+        {
+            初始金额.Text = str;
+        }
+
+        /// <summary>
+        /// 设置币数目
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void set币数目(String str)
+        {
+            币数目.Text = str;
+        }
+
+        /// <summary>
+        /// 设置收益率
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void set收益率(String str)
+        {
+            收益率.Text = str;
         }
 
         /// <summary>
@@ -168,6 +273,29 @@ namespace bot_test
             Check.Enabled = false;
             初始币数.Enabled = false;
             单次交易.Enabled = false;
+            一分钟.Enabled = false;
+            三分钟.Enabled = false;
+            五分钟.Enabled = false;
+            十五分钟.Enabled = false;
+            三十分钟.Enabled = false;
+            一小时.Enabled = false;
+            两小时.Enabled = false;
+            四小时.Enabled = false;
+            六小时.Enabled = false;
+            十二小时.Enabled = false;
+            日.Enabled = false;
+            周.Enabled = false;
+            本周.Enabled = false;
+            季度.Enabled = false;
+            下周.Enabled = false;
+            BTC.Enabled = false;
+            LTC.Enabled = false;
+            ETH.Enabled = false;
+            ETC.Enabled = false;
+            BCH.Enabled = false;
+            BTG.Enabled = false;
+            XRP.Enabled = false;
+            EOS.Enabled = false;
         }
 
         /// <summary>
@@ -185,6 +313,57 @@ namespace bot_test
             Check.Enabled = true;
             初始币数.Enabled = true;
             单次交易.Enabled = true;
+            一分钟.Enabled = true;
+            三分钟.Enabled = true;
+            五分钟.Enabled = true;
+            十五分钟.Enabled = true;
+            三十分钟.Enabled = true;
+            一小时.Enabled = true;
+            两小时.Enabled = true;
+            四小时.Enabled = true;
+            六小时.Enabled = true;
+            十二小时.Enabled = true;
+            日.Enabled = true;
+            周.Enabled = true;
+            价格.Text = "";
+            日涨幅.Text = "";
+            MACD.Text = "";
+            KDJ.Text = "";
+            本周.Enabled = true;
+            季度.Enabled = true;
+            下周.Enabled = true;
+            BTC.Enabled = true;
+            LTC.Enabled = true;
+            ETH.Enabled = true;
+            ETC.Enabled = true;
+            BCH.Enabled = true;
+            BTG.Enabled = true;
+            XRP.Enabled = true;
+            EOS.Enabled = true;
+        }
+
+        /// <summary>
+        /// “MACD_choice”按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private void MACD_choice_CheckedChanged(object sender, EventArgs e)
+        {
+            MACD_rate.ReadOnly = false;
+            KDJ_rate.ReadOnly = true;
+        }
+
+        /// <summary>
+        /// “KDJ_choice”按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private void KDJ_choice_CheckedChanged(object sender, EventArgs e)
+        {
+            MACD_rate.ReadOnly = true;
+            KDJ_rate.ReadOnly = false;
         }
     }
 }

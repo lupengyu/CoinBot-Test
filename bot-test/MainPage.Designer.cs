@@ -57,6 +57,21 @@
             this.交易列表 = new System.Windows.Forms.GroupBox();
             this.交易信息 = new System.Windows.Forms.TextBox();
             this.策略选择 = new System.Windows.Forms.GroupBox();
+            this.时间梯度 = new System.Windows.Forms.GroupBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.周 = new System.Windows.Forms.RadioButton();
+            this.六小时 = new System.Windows.Forms.RadioButton();
+            this.一小时 = new System.Windows.Forms.RadioButton();
+            this.五分钟 = new System.Windows.Forms.RadioButton();
+            this.日 = new System.Windows.Forms.RadioButton();
+            this.十二小时 = new System.Windows.Forms.RadioButton();
+            this.四小时 = new System.Windows.Forms.RadioButton();
+            this.两小时 = new System.Windows.Forms.RadioButton();
+            this.三十分钟 = new System.Windows.Forms.RadioButton();
+            this.一分钟 = new System.Windows.Forms.RadioButton();
+            this.十五分钟 = new System.Windows.Forms.RadioButton();
+            this.三分钟 = new System.Windows.Forms.RadioButton();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.Check = new System.Windows.Forms.CheckBox();
             this.单次交易 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -86,6 +101,8 @@
             this.账号信息.SuspendLayout();
             this.交易列表.SuspendLayout();
             this.策略选择.SuspendLayout();
+            this.时间梯度.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.panel1.SuspendLayout();
             this.币种信息.SuspendLayout();
             this.SuspendLayout();
@@ -309,7 +326,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 12);
             this.label3.TabIndex = 4;
-            this.label3.Text = "初始金额(usdt)";
+            this.label3.Text = "初始币数(usdt)";
             // 
             // 总金额
             // 
@@ -350,7 +367,7 @@
             this.交易列表.Controls.Add(this.交易信息);
             this.交易列表.Location = new System.Drawing.Point(103, 12);
             this.交易列表.Name = "交易列表";
-            this.交易列表.Size = new System.Drawing.Size(433, 322);
+            this.交易列表.Size = new System.Drawing.Size(433, 188);
             this.交易列表.TabIndex = 3;
             this.交易列表.TabStop = false;
             this.交易列表.Text = "交易列表";
@@ -362,11 +379,13 @@
             this.交易信息.Name = "交易信息";
             this.交易信息.ReadOnly = true;
             this.交易信息.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.交易信息.Size = new System.Drawing.Size(433, 302);
+            this.交易信息.Size = new System.Drawing.Size(433, 168);
             this.交易信息.TabIndex = 1;
             // 
             // 策略选择
             // 
+            this.策略选择.Controls.Add(this.时间梯度);
+            this.策略选择.Controls.Add(this.panel4);
             this.策略选择.Controls.Add(this.Check);
             this.策略选择.Controls.Add(this.单次交易);
             this.策略选择.Controls.Add(this.label10);
@@ -375,19 +394,177 @@
             this.策略选择.Controls.Add(this.结束);
             this.策略选择.Controls.Add(this.开始);
             this.策略选择.Controls.Add(this.panel1);
-            this.策略选择.Location = new System.Drawing.Point(542, 208);
+            this.策略选择.Location = new System.Drawing.Point(103, 208);
             this.策略选择.Name = "策略选择";
-            this.策略选择.Size = new System.Drawing.Size(246, 126);
+            this.策略选择.Size = new System.Drawing.Size(685, 126);
             this.策略选择.TabIndex = 4;
             this.策略选择.TabStop = false;
             this.策略选择.Text = "策略选择";
+            // 
+            // 时间梯度
+            // 
+            this.时间梯度.Controls.Add(this.panel5);
+            this.时间梯度.Location = new System.Drawing.Point(247, 11);
+            this.时间梯度.Name = "时间梯度";
+            this.时间梯度.Size = new System.Drawing.Size(312, 109);
+            this.时间梯度.TabIndex = 0;
+            this.时间梯度.TabStop = false;
+            this.时间梯度.Text = "时间梯度";
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.周);
+            this.panel5.Controls.Add(this.六小时);
+            this.panel5.Controls.Add(this.一小时);
+            this.panel5.Controls.Add(this.五分钟);
+            this.panel5.Controls.Add(this.日);
+            this.panel5.Controls.Add(this.十二小时);
+            this.panel5.Controls.Add(this.四小时);
+            this.panel5.Controls.Add(this.两小时);
+            this.panel5.Controls.Add(this.三十分钟);
+            this.panel5.Controls.Add(this.一分钟);
+            this.panel5.Controls.Add(this.十五分钟);
+            this.panel5.Controls.Add(this.三分钟);
+            this.panel5.Location = new System.Drawing.Point(6, 14);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(300, 91);
+            this.panel5.TabIndex = 6;
+            // 
+            // 周
+            // 
+            this.周.AutoSize = true;
+            this.周.Location = new System.Drawing.Point(195, 69);
+            this.周.Name = "周";
+            this.周.Size = new System.Drawing.Size(35, 16);
+            this.周.TabIndex = 12;
+            this.周.Text = "周";
+            this.周.UseVisualStyleBackColor = true;
+            // 
+            // 六小时
+            // 
+            this.六小时.AutoSize = true;
+            this.六小时.Location = new System.Drawing.Point(195, 47);
+            this.六小时.Name = "六小时";
+            this.六小时.Size = new System.Drawing.Size(53, 16);
+            this.六小时.TabIndex = 11;
+            this.六小时.Text = "6小时";
+            this.六小时.UseVisualStyleBackColor = true;
+            // 
+            // 一小时
+            // 
+            this.一小时.AutoSize = true;
+            this.一小时.Location = new System.Drawing.Point(195, 25);
+            this.一小时.Name = "一小时";
+            this.一小时.Size = new System.Drawing.Size(53, 16);
+            this.一小时.TabIndex = 10;
+            this.一小时.Text = "1小时";
+            this.一小时.UseVisualStyleBackColor = true;
+            // 
+            // 五分钟
+            // 
+            this.五分钟.AutoSize = true;
+            this.五分钟.Location = new System.Drawing.Point(195, 3);
+            this.五分钟.Name = "五分钟";
+            this.五分钟.Size = new System.Drawing.Size(53, 16);
+            this.五分钟.TabIndex = 9;
+            this.五分钟.Text = "5分钟";
+            this.五分钟.UseVisualStyleBackColor = true;
+            // 
+            // 日
+            // 
+            this.日.AutoSize = true;
+            this.日.Location = new System.Drawing.Point(99, 69);
+            this.日.Name = "日";
+            this.日.Size = new System.Drawing.Size(35, 16);
+            this.日.TabIndex = 8;
+            this.日.Text = "日";
+            this.日.UseVisualStyleBackColor = true;
+            // 
+            // 十二小时
+            // 
+            this.十二小时.AutoSize = true;
+            this.十二小时.Location = new System.Drawing.Point(3, 69);
+            this.十二小时.Name = "十二小时";
+            this.十二小时.Size = new System.Drawing.Size(59, 16);
+            this.十二小时.TabIndex = 7;
+            this.十二小时.Text = "12小时";
+            this.十二小时.UseVisualStyleBackColor = true;
+            // 
+            // 四小时
+            // 
+            this.四小时.AutoSize = true;
+            this.四小时.Location = new System.Drawing.Point(99, 47);
+            this.四小时.Name = "四小时";
+            this.四小时.Size = new System.Drawing.Size(53, 16);
+            this.四小时.TabIndex = 6;
+            this.四小时.Text = "4小时";
+            this.四小时.UseVisualStyleBackColor = true;
+            // 
+            // 两小时
+            // 
+            this.两小时.AutoSize = true;
+            this.两小时.Location = new System.Drawing.Point(3, 47);
+            this.两小时.Name = "两小时";
+            this.两小时.Size = new System.Drawing.Size(53, 16);
+            this.两小时.TabIndex = 5;
+            this.两小时.Text = "2小时";
+            this.两小时.UseVisualStyleBackColor = true;
+            // 
+            // 三十分钟
+            // 
+            this.三十分钟.AutoSize = true;
+            this.三十分钟.Location = new System.Drawing.Point(99, 25);
+            this.三十分钟.Name = "三十分钟";
+            this.三十分钟.Size = new System.Drawing.Size(59, 16);
+            this.三十分钟.TabIndex = 4;
+            this.三十分钟.Text = "30分钟";
+            this.三十分钟.UseVisualStyleBackColor = true;
+            // 
+            // 一分钟
+            // 
+            this.一分钟.AutoSize = true;
+            this.一分钟.Checked = true;
+            this.一分钟.Location = new System.Drawing.Point(3, 3);
+            this.一分钟.Name = "一分钟";
+            this.一分钟.Size = new System.Drawing.Size(53, 16);
+            this.一分钟.TabIndex = 3;
+            this.一分钟.TabStop = true;
+            this.一分钟.Text = "1分钟";
+            this.一分钟.UseVisualStyleBackColor = true;
+            // 
+            // 十五分钟
+            // 
+            this.十五分钟.AutoSize = true;
+            this.十五分钟.Location = new System.Drawing.Point(3, 25);
+            this.十五分钟.Name = "十五分钟";
+            this.十五分钟.Size = new System.Drawing.Size(59, 16);
+            this.十五分钟.TabIndex = 2;
+            this.十五分钟.Text = "15分钟";
+            this.十五分钟.UseVisualStyleBackColor = true;
+            // 
+            // 三分钟
+            // 
+            this.三分钟.AutoSize = true;
+            this.三分钟.Location = new System.Drawing.Point(99, 3);
+            this.三分钟.Name = "三分钟";
+            this.三分钟.Size = new System.Drawing.Size(53, 16);
+            this.三分钟.TabIndex = 1;
+            this.三分钟.Text = "3分钟";
+            this.三分钟.UseVisualStyleBackColor = true;
+            // 
+            // panel4
+            // 
+            this.panel4.Location = new System.Drawing.Point(247, 15);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(200, 100);
+            this.panel4.TabIndex = 14;
             // 
             // Check
             // 
             this.Check.AutoSize = true;
             this.Check.Checked = true;
             this.Check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Check.Location = new System.Drawing.Point(9, 68);
+            this.Check.Location = new System.Drawing.Point(6, 96);
             this.Check.Name = "Check";
             this.Check.Size = new System.Drawing.Size(114, 16);
             this.Check.TabIndex = 13;
@@ -431,7 +608,7 @@
             // 结束
             // 
             this.结束.Enabled = false;
-            this.结束.Location = new System.Drawing.Point(146, 89);
+            this.结束.Location = new System.Drawing.Point(585, 74);
             this.结束.Name = "结束";
             this.结束.Size = new System.Drawing.Size(75, 23);
             this.结束.TabIndex = 8;
@@ -441,7 +618,7 @@
             // 
             // 开始
             // 
-            this.开始.Location = new System.Drawing.Point(39, 89);
+            this.开始.Location = new System.Drawing.Point(585, 38);
             this.开始.Name = "开始";
             this.开始.Size = new System.Drawing.Size(75, 23);
             this.开始.TabIndex = 7;
@@ -455,22 +632,23 @@
             this.panel1.Controls.Add(this.MACD_rate);
             this.panel1.Controls.Add(this.MACD_choice);
             this.panel1.Controls.Add(this.KDJ_choice);
-            this.panel1.Location = new System.Drawing.Point(6, 20);
+            this.panel1.Location = new System.Drawing.Point(6, 15);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(108, 48);
+            this.panel1.Size = new System.Drawing.Size(108, 70);
             this.panel1.TabIndex = 6;
             // 
             // KDJ_rate
             // 
-            this.KDJ_rate.Location = new System.Drawing.Point(51, 24);
+            this.KDJ_rate.Location = new System.Drawing.Point(51, 40);
             this.KDJ_rate.Name = "KDJ_rate";
+            this.KDJ_rate.ReadOnly = true;
             this.KDJ_rate.Size = new System.Drawing.Size(57, 21);
             this.KDJ_rate.TabIndex = 15;
             this.KDJ_rate.Text = "0";
             // 
             // MACD_rate
             // 
-            this.MACD_rate.Location = new System.Drawing.Point(51, 0);
+            this.MACD_rate.Location = new System.Drawing.Point(51, 14);
             this.MACD_rate.Name = "MACD_rate";
             this.MACD_rate.Size = new System.Drawing.Size(57, 21);
             this.MACD_rate.TabIndex = 14;
@@ -481,23 +659,25 @@
             // 
             this.MACD_choice.AutoSize = true;
             this.MACD_choice.Checked = true;
-            this.MACD_choice.Location = new System.Drawing.Point(3, 3);
+            this.MACD_choice.Location = new System.Drawing.Point(3, 14);
             this.MACD_choice.Name = "MACD_choice";
             this.MACD_choice.Size = new System.Drawing.Size(47, 16);
             this.MACD_choice.TabIndex = 3;
             this.MACD_choice.TabStop = true;
             this.MACD_choice.Text = "MACD";
             this.MACD_choice.UseVisualStyleBackColor = true;
+            this.MACD_choice.CheckedChanged += new System.EventHandler(this.MACD_choice_CheckedChanged);
             // 
             // KDJ_choice
             // 
             this.KDJ_choice.AutoSize = true;
-            this.KDJ_choice.Location = new System.Drawing.Point(3, 25);
+            this.KDJ_choice.Location = new System.Drawing.Point(3, 41);
             this.KDJ_choice.Name = "KDJ_choice";
             this.KDJ_choice.Size = new System.Drawing.Size(41, 16);
             this.KDJ_choice.TabIndex = 2;
             this.KDJ_choice.Text = "KDJ";
             this.KDJ_choice.UseVisualStyleBackColor = true;
+            this.KDJ_choice.CheckedChanged += new System.EventHandler(this.KDJ_choice_CheckedChanged);
             // 
             // 币种信息
             // 
@@ -610,6 +790,9 @@
             this.交易列表.PerformLayout();
             this.策略选择.ResumeLayout(false);
             this.策略选择.PerformLayout();
+            this.时间梯度.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.币种信息.ResumeLayout(false);
@@ -669,5 +852,20 @@
         private System.Windows.Forms.CheckBox Check;
         private System.Windows.Forms.TextBox KDJ_rate;
         private System.Windows.Forms.TextBox MACD_rate;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.GroupBox 时间梯度;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.RadioButton 日;
+        private System.Windows.Forms.RadioButton 十二小时;
+        private System.Windows.Forms.RadioButton 四小时;
+        private System.Windows.Forms.RadioButton 两小时;
+        private System.Windows.Forms.RadioButton 三十分钟;
+        private System.Windows.Forms.RadioButton 一分钟;
+        private System.Windows.Forms.RadioButton 十五分钟;
+        private System.Windows.Forms.RadioButton 三分钟;
+        private System.Windows.Forms.RadioButton 周;
+        private System.Windows.Forms.RadioButton 六小时;
+        private System.Windows.Forms.RadioButton 一小时;
+        private System.Windows.Forms.RadioButton 五分钟;
     }
 }

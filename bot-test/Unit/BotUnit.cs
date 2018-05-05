@@ -18,5 +18,13 @@ namespace bot_test.Unit
         {
             return DateTime.Now.ToString();
         }
+        /// <summary>
+        /// 获取当前日期
+        /// </summary>
+        /// <returns></returns>
+        public static int getDay()
+        {
+            return DateTime.Now.Day;
+        }
     }
 }
