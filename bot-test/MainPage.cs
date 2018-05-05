@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using bot_test.Unit;
 using bot_test.thread;
+using bot_test.strategy;
 
 namespace bot_test
 {
@@ -47,30 +48,41 @@ namespace bot_test
             {
                 double initCoin;
                 double exchangeCoin;
-                double rate;
-                int strategy;
                 String symbol;
                 String contractType;
                 String type;
+                Strategy strategy;
                 {
                     if (!double.TryParse(初始币数.Text, out initCoin)
                     || !double.TryParse(单次交易.Text, out exchangeCoin))
                         throw new Exception("初始币数与单次交易必须为数字");
-                    if (!MACD_choice.Checked && !KDJ_choice.Checked)
+                    if(MACD_choice.Checked)
                     {
-                        throw new Exception("交易策略必须选择");
-                    }
-                    else if (MACD_choice.Checked)
-                    {
-                        strategy = 1;
+                        double rate;
                         if (!double.TryParse(MACD_rate.Text, out rate))
                             throw new Exception("交易策略比率为必填");
-                    }
-                    else
+                        strategy = new Strategy("MACD");
+                        strategy.p1 = rate;
+                    } else if(KDJ_choice.Checked)
                     {
-                        strategy = 2;
+                        double rate;
                         if (!double.TryParse(KDJ_rate.Text, out rate))
                             throw new Exception("交易策略比率为必填");
+                        strategy = new Strategy("KDJ");
+                        strategy.p1 = rate;
+                    } else if(MA_choice.Checked)
+                    {
+                        double rate1, rate2;
+                        if (!double.TryParse(MAsmall.Text, out rate1))
+                            throw new Exception("交易策略比率为必填");
+                        if (!double.TryParse(MAbig.Text, out rate2))
+                            throw new Exception("交易策略比率为必填");
+                        strategy = new Strategy("MA");
+                        strategy.p1 = rate1;
+                        strategy.p1 = rate2;
+                    } else
+                    {
+                        throw new Exception("交易策略必须选择");
                     }
                     if (BTC.Checked)
                     {
@@ -162,7 +174,7 @@ namespace bot_test
                         throw new Exception("请选择时间梯度");
                     }
                 }
-                thread = new MainThread(this, initCoin, exchangeCoin, strategy, rate, symbol, contractType, type);
+                thread = new MainThread(this, initCoin, exchangeCoin, strategy, symbol, contractType, type);
             } catch(Exception err)
             {
                 交易信息_Add("系统启动失败");
@@ -259,6 +271,26 @@ namespace bot_test
         }
 
         /// <summary>
+        /// 设置MACD
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void setMACD(String str)
+        {
+            MACD.Text = str;
+        }
+
+        /// <summary>
+        /// 设置KDJ
+        /// </summary>
+        /// <param name="str">价格信息</param>
+        /// <returns></returns>
+        public void setKDJ(String str)
+        {
+            KDJ.Text = str;
+        }
+
+        /// <summary>
         /// 设置“策略选择”内所有组件不可修改
         /// </summary>
         /// <returns></returns>
@@ -270,6 +302,9 @@ namespace bot_test
             MACD_rate.Enabled = false;
             KDJ_choice.Enabled = false;
             KDJ_rate.Enabled = false;
+            MA_choice.Enabled = false;
+            MAsmall.Enabled = false;
+            MAbig.Enabled = false;
             Check.Enabled = false;
             初始币数.Enabled = false;
             单次交易.Enabled = false;
@@ -284,7 +319,6 @@ namespace bot_test
             六小时.Enabled = false;
             十二小时.Enabled = false;
             日.Enabled = false;
-            周.Enabled = false;
             本周.Enabled = false;
             季度.Enabled = false;
             下周.Enabled = false;
@@ -311,6 +345,9 @@ namespace bot_test
             KDJ_choice.Enabled = true;
             KDJ_rate.Enabled = true;
             Check.Enabled = true;
+            MA_choice.Enabled = true;
+            MAsmall.Enabled = true;
+            MAbig.Enabled = true;
             初始币数.Enabled = true;
             单次交易.Enabled = true;
             一分钟.Enabled = true;
@@ -324,7 +361,6 @@ namespace bot_test
             六小时.Enabled = true;
             十二小时.Enabled = true;
             日.Enabled = true;
-            周.Enabled = true;
             价格.Text = "";
             日涨幅.Text = "";
             MACD.Text = "";
@@ -352,6 +388,8 @@ namespace bot_test
         {
             MACD_rate.ReadOnly = false;
             KDJ_rate.ReadOnly = true;
+            MAsmall.ReadOnly = true;
+            MAbig.ReadOnly = true;
         }
 
         /// <summary>
@@ -364,6 +402,22 @@ namespace bot_test
         {
             MACD_rate.ReadOnly = true;
             KDJ_rate.ReadOnly = false;
+            MAsmall.ReadOnly = true;
+            MAbig.ReadOnly = true;
+        }
+
+        /// <summary>
+        /// “MA_choice”按钮点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private void MA_choice_CheckedChanged(object sender, EventArgs e)
+        {
+            MACD_rate.ReadOnly = true;
+            KDJ_rate.ReadOnly = true;
+            MAsmall.ReadOnly = false;
+            MAbig.ReadOnly = false;
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Web.Script.Serialization;
 using bot_test.Unit;
 using com.okcoin.rest.future;
 using com.okcoin.rest.stock;
+using bot_test.strategy;
 
 namespace bot_test.thread
 {
@@ -35,11 +36,7 @@ namespace bot_test.thread
         /// <summary>
         ///  策略选择
         /// </summary>
-        private double strategy;
-        /// <summary>
-        ///  交易策略比率
-        /// </summary>
-        private double rate;
+        private Strategy strategy;
         /// <summary>
         ///  当前币数
         /// </summary>
@@ -89,13 +86,12 @@ namespace bot_test.thread
         /// <param name="acontractType">合约期限</param>
         /// <returns></returns>
         public MainThread(MainPage apage, double ainitCoin, double aexchangeCoin,
-            int astrategy, double arate, String asymbol, String acontractType, String atype)
+            Strategy astrategy, String asymbol, String acontractType, String atype)
         {
             this.page = apage;
             this.initCoin = ainitCoin;
             this.exchangeCoin = aexchangeCoin;
             this.strategy = astrategy;
-            this.rate = arate;
             this.symbol = asymbol;
             this.contractType = acontractType;
             this.Coin = ainitCoin;
@@ -109,6 +105,7 @@ namespace bot_test.thread
             mainthread.Start();
             ThreadPool.QueueUserWorkItem(dayrefrash, null);
             page.交易信息_Add("系统启动:" + startTime);
+            page.交易信息_Add(strategy.strategyname);
             page.set初始金额(initCoin.ToString());
             page.set币数目(Coin.ToString());
             page.set收益率(getWinrate());
@@ -193,6 +190,34 @@ namespace bot_test.thread
         }
 
         /// <summary>
+        /// 获取当前相关参数
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private void getP(object data)
+        {
+            String result = getRequest.future_kline(symbol, type, contractType, "26", "");
+            String[] sArray = result.Split(',');//开高低收
+            double EMA12 = 0;
+            double EMA26 = 0;
+            double DIF = 0;
+            double DEA = 0;
+            double nowPrice = 0;
+            for (int i = 4; i < sArray.Length; i += 7)
+            {
+                double price;
+                double.TryParse(sArray[i], out price);
+                nowPrice = price;
+                EMA12 = (EMA12 * 11) / 13 + price * 2 / 13;
+                EMA26 = (EMA26 * 25) / 27 + price * 2 / 27;
+                DIF = EMA12 - EMA26;
+                DEA = (DEA * 8) / 10 + DIF * 2 / 10;
+            }
+            double MACD = (DIF - DEA) * 2;
+            page.setMACD(MACD.ToString());
+        }
+
+        /// <summary>
         /// 获取当前价格函数相关参数
         /// </summary>
         /// <param name="data"></param>
@@ -200,6 +225,7 @@ namespace bot_test.thread
         private void getPrice(object data)
         {
             ThreadPool.QueueUserWorkItem(changePrice, null);
+            ThreadPool.QueueUserWorkItem(getP, null);
         }
 
         private void dayrefrash(object data)

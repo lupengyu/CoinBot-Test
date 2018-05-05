@@ -59,6 +59,7 @@
     <Compile Include="rest\StringUtil.cs" />
     <Compile Include="stock\IStockRestApi.cs" />
     <Compile Include="stock\StockRestApi.cs" />
+    <Compile Include="strategy\Strategy.cs" />
     <Compile Include="Thread\MainThread.cs" />
     <Compile Include="Unit\BotUnit.cs" />
     <EmbeddedResource Include="MainPage.resx">

@@ -93,6 +93,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.价格 = new System.Windows.Forms.TextBox();
+            this.MA_choice = new System.Windows.Forms.RadioButton();
+            this.MAsmall = new System.Windows.Forms.TextBox();
+            this.MAbig = new System.Windows.Forms.TextBox();
             this.合约选择.SuspendLayout();
             this.合约列表.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -433,6 +436,7 @@
             // 周
             // 
             this.周.AutoSize = true;
+            this.周.Enabled = false;
             this.周.Location = new System.Drawing.Point(195, 69);
             this.周.Name = "周";
             this.周.Size = new System.Drawing.Size(35, 16);
@@ -564,7 +568,7 @@
             this.Check.AutoSize = true;
             this.Check.Checked = true;
             this.Check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Check.Location = new System.Drawing.Point(6, 96);
+            this.Check.Location = new System.Drawing.Point(132, 94);
             this.Check.Name = "Check";
             this.Check.Size = new System.Drawing.Size(114, 16);
             this.Check.TabIndex = 13;
@@ -628,13 +632,16 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.MAbig);
+            this.panel1.Controls.Add(this.MAsmall);
+            this.panel1.Controls.Add(this.MA_choice);
             this.panel1.Controls.Add(this.KDJ_rate);
             this.panel1.Controls.Add(this.MACD_rate);
             this.panel1.Controls.Add(this.MACD_choice);
             this.panel1.Controls.Add(this.KDJ_choice);
             this.panel1.Location = new System.Drawing.Point(6, 15);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(108, 70);
+            this.panel1.Size = new System.Drawing.Size(108, 109);
             this.panel1.TabIndex = 6;
             // 
             // KDJ_rate
@@ -764,6 +771,35 @@
             this.价格.Size = new System.Drawing.Size(108, 21);
             this.价格.TabIndex = 0;
             // 
+            // MA_choice
+            // 
+            this.MA_choice.AutoSize = true;
+            this.MA_choice.Location = new System.Drawing.Point(3, 78);
+            this.MA_choice.Name = "MA_choice";
+            this.MA_choice.Size = new System.Drawing.Size(35, 16);
+            this.MA_choice.TabIndex = 16;
+            this.MA_choice.Text = "MA";
+            this.MA_choice.UseVisualStyleBackColor = true;
+            this.MA_choice.CheckedChanged += new System.EventHandler(this.MA_choice_CheckedChanged);
+            // 
+            // MAsmall
+            // 
+            this.MAsmall.Location = new System.Drawing.Point(51, 67);
+            this.MAsmall.Name = "MAsmall";
+            this.MAsmall.ReadOnly = true;
+            this.MAsmall.Size = new System.Drawing.Size(57, 21);
+            this.MAsmall.TabIndex = 17;
+            this.MAsmall.Text = "7";
+            // 
+            // MAbig
+            // 
+            this.MAbig.Location = new System.Drawing.Point(51, 88);
+            this.MAbig.Name = "MAbig";
+            this.MAbig.ReadOnly = true;
+            this.MAbig.Size = new System.Drawing.Size(57, 21);
+            this.MAbig.TabIndex = 18;
+            this.MAbig.Text = "30";
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -867,5 +903,8 @@
         private System.Windows.Forms.RadioButton 六小时;
         private System.Windows.Forms.RadioButton 一小时;
         private System.Windows.Forms.RadioButton 五分钟;
+        private System.Windows.Forms.TextBox MAbig;
+        private System.Windows.Forms.TextBox MAsmall;
+        private System.Windows.Forms.RadioButton MA_choice;
     }
 }
