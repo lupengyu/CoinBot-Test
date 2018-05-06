@@ -140,7 +140,7 @@ namespace bot_test.thread
             mainthread.IsBackground = true;
             mainthread.Start();
             ThreadPool.QueueUserWorkItem(dayrefrash, null);
-            page.交易信息_Add("系统启动:" + startTime);
+            page.交易信息_Add("系统启动");
             page.set初始金额(initCoin.ToString());
             page.set币数目(Coin.ToString());
             page.set收益率(getWinrate());
@@ -270,7 +270,7 @@ namespace bot_test.thread
                                             if (wait == 60)
                                             {
                                                 page.交易信息_Add("卖出订单超时");
-                                                sell = null;
+                                                sellorder = null;
                                             }
                                             coinsum += order.getcoin();
                                             coinsum += (price - order.getbuyprice()) * 10 / price;
@@ -533,7 +533,7 @@ namespace bot_test.thread
         public void close()
         {
             mainthread.Abort();
-            page.交易信息_Add("系统中止:" + BotUnit.getLocalTime());
+            page.交易信息_Add("系统中止");
         }
 
         /// <summary>
@@ -542,13 +542,13 @@ namespace bot_test.thread
         /// <returns></returns>
         public void addSummary()
         {
-            page.交易信息_Add("####################");
-            page.交易信息_Add("总结报告:");
-            page.交易信息_Add("当前时间:" + BotUnit.getLocalTime());
-            page.交易信息_Add("初始币数:" + initCoin.ToString());
-            page.交易信息_Add("当前币数:" + coinsum.ToString());
-            page.交易信息_Add("总收益率:" + getWinrate());
-            page.交易信息_Add("####################");
+            String str = "总结报告\r\n" +
+                "####################\r\n" +
+                "初始币数: " + initCoin.ToString() +
+                " 当前币数: " + coinsum.ToString() +
+                " 总收益率: " + getWinrate() + "\r\n" + 
+                "####################";
+            page.交易信息_Add(str);
         }
 
         /// <summary>

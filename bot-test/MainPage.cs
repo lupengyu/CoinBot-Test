@@ -209,7 +209,7 @@ namespace bot_test
         /// <returns></returns>
         public void 交易信息_Add(String str)
         {
-            交易信息.Text += str + CSRF;
+            交易信息.Text += BotUnit.getLocalTime() + ": " + str + CSRF;
             this.交易信息.Focus();
             this.交易信息.Select(this.交易信息.TextLength, 0);
             this.交易信息.ScrollToCaret();
