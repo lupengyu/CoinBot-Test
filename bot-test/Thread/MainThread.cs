@@ -119,7 +119,8 @@ namespace bot_test.thread
         /// <param name="acontractType">合约期限</param>
         /// <returns></returns>
         public MainThread(MainPage apage, double ainitCoin, double aexchangeCoin,
-            Strategy astrategy, String asymbol, String acontractType, String atype, int aminBetween)
+            Strategy astrategy, String asymbol, String acontractType, String atype, 
+            int aminBetween, String atime, int aday)
         {
             this.page = apage;
             this.initCoin = ainitCoin;
@@ -132,8 +133,8 @@ namespace bot_test.thread
             this.type = atype;
             this.minBetween = aminBetween;
             this.timecount = aminBetween;
-            startTime = BotUnit.getLocalTime();
-            day = BotUnit.getDay();
+            startTime = atime;
+            day = aday;
             String url_prex = "https://www.okex.cn";
             this.getRequest = new FutureRestApiV1(url_prex);
             mainthread = new Thread(new ThreadStart(run));

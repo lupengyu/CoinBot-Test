@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using System.Windows.Forms;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
+using System.IO;
 using bot_test.Unit;
 using bot_test.thread;
 using bot_test.strategy;
@@ -25,6 +26,10 @@ namespace bot_test
         ///  运行主线程
         /// </summary>
         private MainThread thread;
+        /// <summary>
+        ///  日志文件写入器
+        /// </summary>
+        private StreamWriter fw = null;
 
         /// <summary>
         /// “MainPage”类构造函数
@@ -44,6 +49,15 @@ namespace bot_test
         /// <returns></returns>
         private void 开始_Click(object sender, EventArgs e)
         {
+            String time = BotUnit.getLocalTime();
+            int day = BotUnit.getDay();
+            String filename = "log" + time + ".txt";
+            filename = filename.Replace(" ", "");
+            filename = filename.Replace(":", "");
+            filename = filename.Replace("\\", "");
+            filename = filename.Replace("/", "");
+            FileStream fs = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            fw = new StreamWriter(fs);
             try
             {
                 double initCoin;
@@ -179,7 +193,7 @@ namespace bot_test
                         throw new Exception("请选择时间梯度");
                     }
                 }
-                thread = new MainThread(this, initCoin, exchangeCoin, strategy, symbol, contractType, type, minBetween);
+                thread = new MainThread(this, initCoin, exchangeCoin, strategy, symbol, contractType, type, minBetween, time, day);
             } catch(Exception err)
             {
                 交易信息_Add("系统启动失败");
@@ -200,6 +214,8 @@ namespace bot_test
             thread.addSummary();
             thread.close();
             set策略选择Enable();
+            fw.Close();
+            fw = null;
         }
 
         /// <summary>
@@ -209,10 +225,13 @@ namespace bot_test
         /// <returns></returns>
         public void 交易信息_Add(String str)
         {
-            交易信息.Text += BotUnit.getLocalTime() + ": " + str + CSRF;
+            String add = BotUnit.getLocalTime() + ": " + str;
+            交易信息.Text += add + CSRF;
             this.交易信息.Focus();
             this.交易信息.Select(this.交易信息.TextLength, 0);
             this.交易信息.ScrollToCaret();
+            fw.WriteLine(add);
+            fw.Flush();
         }
 
         /// <summary>
