@@ -57,6 +57,8 @@
             this.交易列表 = new System.Windows.Forms.GroupBox();
             this.交易信息 = new System.Windows.Forms.TextBox();
             this.策略选择 = new System.Windows.Forms.GroupBox();
+            this.最短间隔 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.时间梯度 = new System.Windows.Forms.GroupBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.周 = new System.Windows.Forms.RadioButton();
@@ -95,8 +97,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.价格 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.最短间隔 = new System.Windows.Forms.TextBox();
             this.合约选择.SuspendLayout();
             this.合约列表.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -405,6 +405,23 @@
             this.策略选择.TabIndex = 4;
             this.策略选择.TabStop = false;
             this.策略选择.Text = "策略选择";
+            // 
+            // 最短间隔
+            // 
+            this.最短间隔.Location = new System.Drawing.Point(132, 103);
+            this.最短间隔.Name = "最短间隔";
+            this.最短间隔.Size = new System.Drawing.Size(108, 21);
+            this.最短间隔.TabIndex = 16;
+            this.最短间隔.Text = "300";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(132, 88);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(71, 12);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "最短间隔(s)";
             // 
             // 时间梯度
             // 
@@ -790,23 +807,6 @@
             this.价格.Size = new System.Drawing.Size(108, 21);
             this.价格.TabIndex = 0;
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(132, 88);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(71, 12);
-            this.label11.TabIndex = 15;
-            this.label11.Text = "最短间隔(s)";
-            // 
-            // 最短间隔
-            // 
-            this.最短间隔.Location = new System.Drawing.Point(132, 103);
-            this.最短间隔.Name = "最短间隔";
-            this.最短间隔.Size = new System.Drawing.Size(108, 21);
-            this.最短间隔.TabIndex = 16;
-            this.最短间隔.Text = "300";
-            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -819,7 +819,7 @@
             this.Controls.Add(this.合约选择);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainPage";
-            this.Text = "Bitbot";
+            this.Text = "CoinBot";
             this.合约选择.ResumeLayout(false);
             this.合约列表.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
