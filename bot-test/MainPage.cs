@@ -98,7 +98,7 @@ namespace bot_test
                             throw new Exception("MA策略参数过大，最大60");
                         strategy = new Strategy("MA");
                         strategy.p1 = rate1;
-                        strategy.p1 = rate2;
+                        strategy.p2 = rate2;
                     } else
                     {
                         throw new Exception("交易策略必须选择");
